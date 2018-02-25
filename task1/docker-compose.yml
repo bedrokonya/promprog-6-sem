@@ -1,0 +1,45 @@
+version: '2.0'
+services:
+
+  db:
+    image: mongo
+    restart: always
+    networks:
+     - backend
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   networks:
+  #    - my_net
+
+  receive:
+    build: ./reciever
+    depends_on:
+     - db
+     - rabbit
+     #- send
+    networks:
+     - backend
+
+  # send:
+  #   build: ./sender
+  #   networks:
+  #    - my_net
+  #   depends_on:
+  #    - rabbit
+  #    - db
+  #    - adminer
+
+
+  rabbit:
+    image: rabbitmq
+    networks:
+     - public
+     - backend
+
+
+networks:
+  public:
+
+  backend:
